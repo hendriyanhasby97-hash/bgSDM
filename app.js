@@ -2,8 +2,8 @@
 // 1. KONFIGURASI SUPABASE
 // ==========================================
 // Ganti nilai ini dengan URL dan Anon Key dari Project Supabase kamu
-const SUPABASE_URL = 'https://PROYEK_KAMU.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJI...'; 
+const SUPABASE_URL = 'https://rjdymyzeujfxzqwwhxbb.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_t5vG-vnon8s6CM0RejWbIg_g5EGKvwp'; 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ==========================================
