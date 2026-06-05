@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Portal SDM - RSUD Drs. H. AMRI TAMBUNAN</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .hidden { display: none; }
+        .container { display: flex; gap: 20px; }
+        .form-section { width: 50%; padding: 15px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Data Pegawai RSUD</h1>
+    <div class="container">
+        <div class="form-section">
+            <h3>Form Pegawai</h3>
+            <form id="formPegawai">
+                <div class="form-group">
+                    <label>NIP:</label>
+                    <input type="text" id="nip" placeholder="Masukkan 18 Digit NIP">
+                </div>
+                <div class="form-group">
+                    <label>TMT CPNS (Otomatis):</label>
+                    <input type="date" id="tmt_cpns" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Lahir:</label>
+                    <input type="date" id="tanggal_lahir">
+                </div>
+                <div class="form-group">
+                    <label>Rentang BUP (Tahun):</label>
+                    <input type="number" id="rentang_bup" placeholder="Contoh: 58">
+                </div>
+                <div class="form-group">
+                    <label>TMT Pensiun (Otomatis):</label>
+                    <input type="date" id="tmt_pensiun" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Masuk RS:</label>
+                    <input type="date" id="masuk_rs">
+                </div>
+                <div class="form-group">
+                    <label>Masa Kerja (Otomatis):</label>
+                    <input type="text" id="masa_kerja_rs" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Jumlah Anak:</label>
+                    <select id="jumlah_anak">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div class="form-group hidden" id="div_anak1">
+                    <label>Nama Anak 1:</label>
+                    <input type="text" id="anak1">
+                </div>
+                <div class="form-group hidden" id="div_anak2">
+                    <label>Nama Anak 2:</label>
+                    <input type="text" id="anak2">
+                </div>
+                <div class="form-group hidden" id="div_anak3">
+                    <label>Nama Anak 3:</label>
+                    <input type="text" id="anak3">
+                </div>
+
+                <p><i>*Field lain (Status, Golongan, Jabatan dll) ditambahkan mengikuti struktur tabel di Supabase.</i></p>
+
+                <button type="button" id="btnSimpan">Simpan Data</button>
+            </form>
+        </div>
+
+        <div class="form-section">
+            <h3>Daftar Pegawai</h3>
+            <table border="1" width="100%" id="tabelPegawai">
+                <thead>
+                    <tr>
+                        <th>NIP</th>
+                        <th>Nama</th>
+                        <th>Masa Kerja</th>
+                        <th>TMT Pensiun</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="koneksi.js"></script>
+    <script src="pegawai.js"></script>
+    <script src="portal.js"></script>
+</body>
+</html>
