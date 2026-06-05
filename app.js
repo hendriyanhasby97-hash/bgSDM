@@ -1,23 +1,23 @@
 // ==========================================
 // 1. KONFIGURASI SUPABASE
 // ==========================================
-// Ganti nilai ini dengan URL dan Anon Key dari Project Supabase kamu
-const SUPABASE_URL = 'https://rjdymyzeujfxzqwwhxbb.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_t5vG-vnon8s6CM0RejWbIg_g5EGKvwp'; 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Pastikan URL dan Anon Key ini sudah benar milikmu
+const SUPABASE_URL = 'https://PROYEK_KAMU.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJI...'; 
+
+// PERBAIKAN: Ubah nama variabel menjadi supabaseClient agar tidak bentrok
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ==========================================
 // 2. SISTEM NOTIFIKASI (TOAST)
 // ==========================================
 function showToast(message, type = 'success') {
-    // Hapus toast lama jika ada
     const oldToast = document.getElementById('toast-notification');
     if (oldToast) oldToast.remove();
 
     const toast = document.createElement('div');
     toast.id = 'toast-notification';
     
-    // Warna berdasarkan tipe
     const bgColor = type === 'success' ? 'bg-green-600' : 'bg-red-600';
     const icon = type === 'success' 
         ? `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`
@@ -33,12 +33,10 @@ function showToast(message, type = 'success') {
 
     document.body.appendChild(toast);
 
-    // Animasi masuk
     setTimeout(() => {
         toast.classList.remove('translate-y-10', 'opacity-0');
     }, 10);
 
-    // Hilang otomatis setelah 3 detik
     setTimeout(() => {
         toast.classList.add('translate-y-10', 'opacity-0');
         setTimeout(() => toast.remove(), 300);
@@ -46,17 +44,14 @@ function showToast(message, type = 'success') {
 }
 
 // ==========================================
-// 3. INISIALISASI HALAMAN (ROUTING SEDERHANA)
+// 3. INISIALISASI HALAMAN
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // Cek apakah user berada di halaman Login
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         initLoginProcess(loginForm);
     }
 
-    // Cek apakah user berada di halaman Dashboard
     const formPegawai = document.getElementById('formPegawai');
     if (formPegawai) {
         initDashboardLogic(formPegawai);
@@ -79,8 +74,8 @@ function initLoginProcess(form) {
         btnSubmit.disabled = true;
 
         try {
-            // Asumsi menggunakan Supabase Auth
-            const { data, error } = await supabase.auth.signInWithPassword({
+            // PERBAIKAN: Gunakan supabaseClient
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
                 email: email,
                 password: password,
             });
@@ -130,8 +125,8 @@ function initDashboardLogic(form) {
         if(tglLahirInput.value && bupInput.value) {
             let date = new Date(tglLahirInput.value);
             date.setFullYear(date.getFullYear() + parseInt(bupInput.value));
-            date.setMonth(date.getMonth() + 1); // Bulan depan
-            date.setDate(1); // Set ke tanggal 1
+            date.setMonth(date.getMonth() + 1); 
+            date.setDate(1); 
             tmtPensiunInput.value = date.toISOString().split('T')[0];
         }
     };
@@ -146,7 +141,7 @@ function initDashboardLogic(form) {
         masukRsInput.addEventListener('change', (e) => {
             if(!e.target.value) return;
             let awal = new Date(e.target.value);
-            let sekarang = new Date(); // Hari ini
+            let sekarang = new Date(); 
             
             let years = sekarang.getFullYear() - awal.getFullYear();
             let months = sekarang.getMonth() - awal.getMonth();
@@ -174,7 +169,6 @@ function initDashboardLogic(form) {
             document.getElementById('div_anak2').classList.toggle('hidden', jml < 2);
             document.getElementById('div_anak3').classList.toggle('hidden', jml < 3);
             
-            // Clear input jika di-hide
             if(jml < 3) document.getElementById('anak3').value = '';
             if(jml < 2) document.getElementById('anak2').value = '';
             if(jml < 1) document.getElementById('anak1').value = '';
@@ -188,7 +182,6 @@ function initDashboardLogic(form) {
         btnSubmit.innerHTML = 'Menyimpan...';
         btnSubmit.disabled = true;
 
-        // Kumpulkan data dari form
         const payload = {
             nama: document.getElementById('nama').value,
             nik: document.getElementById('nik').value,
@@ -197,14 +190,12 @@ function initDashboardLogic(form) {
             kelompok_pegawai: document.getElementById('kelompok_pegawai').value,
             role: document.getElementById('role').value,
             
-            // Waktu
             tmt_cpns: document.getElementById('tmt_cpns').value || null,
             masuk_rs: document.getElementById('masuk_rs').value || null,
             masa_kerja_rs: document.getElementById('masa_kerja_rs').value,
             rentang_bup: document.getElementById('rentang_bup').value || null,
             tmt_pensiun: document.getElementById('tmt_pensiun').value || null,
 
-            // Pribadi
             tempat_lahir: document.getElementById('tempat_lahir').value,
             tanggal_lahir: document.getElementById('tanggal_lahir').value || null,
             jenis_kelamin: document.getElementById('jenis_kelamin').value,
@@ -217,16 +208,16 @@ function initDashboardLogic(form) {
         };
 
         try {
-            const { data, error } = await supabase
+            // PERBAIKAN: Gunakan supabaseClient
+            const { data, error } = await supabaseClient
                 .from('master_pegawai')
                 .insert([payload]);
 
             if (error) throw error;
 
             showToast('Data Pegawai berhasil disimpan!', 'success');
-            form.reset(); // Kosongkan form setelah sukses
+            form.reset(); 
             
-            // Sembunyikan kembali field anak
             document.getElementById('div_anak1').classList.add('hidden');
             document.getElementById('div_anak2').classList.add('hidden');
             document.getElementById('div_anak3').classList.add('hidden');
@@ -242,32 +233,9 @@ function initDashboardLogic(form) {
 }
 
 // ==========================================
-// 6. LOAD DROPDOWN DARI PENGATURAN (CONTOH)
+// 6. LOAD DROPDOWN DARI PENGATURAN
 // ==========================================
 async function loadDropdownPengaturan() {
-    // Ini adalah contoh jika kamu punya tabel 'pengaturan' di Supabase
-    // yang berisi { kategori: 'role', nilai: 'Admin' }
-    
-    /* try {
-        const { data, error } = await supabase.from('pengaturan').select('*');
-        if (error) throw error;
-        
-        const roleSelect = document.getElementById('role');
-        // Filter data untuk kategori role
-        const roles = data.filter(item => item.kategori === 'role');
-        
-        let options = '<option value="">-- Pilih Role --</option>';
-        roles.forEach(r => {
-            options += `<option value="${r.nilai}">${r.nilai}</option>`;
-        });
-        roleSelect.innerHTML = options;
-        
-    } catch (error) {
-        console.error('Gagal memuat pengaturan:', error);
-    }
-    */
-   
-   // Mockup sementara agar form terlihat utuh:
    const roleSelect = document.getElementById('role');
    if(roleSelect) {
        roleSelect.innerHTML = `
